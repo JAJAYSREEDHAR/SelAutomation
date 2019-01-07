@@ -1,31 +1,83 @@
 Program to Parse Excel Data as list of Maps -> how to use Map to with TestNG Dataprovider in Data Driven Testing
 
-@DataProvider(name = "data")
-	public  Object[][] dataSupplier() throws IOException {
+package lib.utils;
 
-	    File file = new File("C:\\Users\\janapalaA\\Desktop\\Test.xlsx");
-	    FileInputStream fis = new FileInputStream(file);
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-	    XSSFWorkbook wb = new XSSFWorkbook(fis);
-	    
-	    XSSFSheet sheet = wb.getSheet("Sheet1");
-	    //XSSFSheet sheet = wb.getSheetAt(0);
-	    wb.close();
-	    int lastRowNum = sheet.getLastRowNum() ;
-	    int lastCellNum = sheet.getRow(0).getLastCellNum();
-	    Object[][] obj = new Object[lastRowNum][1];
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-	    for (int i = 0; i < lastRowNum; i++) {
-	      Map<Object, Object> datamap = new HashMap<>();
-	      for (int j = 0; j < lastCellNum; j++) {
-	        datamap.put(sheet.getRow(0).getCell(j).toString(), sheet.getRow(i+1).getCell(j).toString());
-	      }
-	      obj[i][0] = datamap;
+public class DataInputProvider {
 
-	    }
-	    return  obj;
-	  }
-	
+	public static Object[][] getSheet(String dataSheetName) {
+
+		Object[][] data = null;
+		FileInputStream fis = null;
+		XSSFWorkbook workbook = null;
+		try {
+
+			fis = new FileInputStream("./data/TestData" + ".xlsx");
+			workbook = new XSSFWorkbook(fis);
+			XSSFSheet sheet = workbook.getSheet(dataSheetName);
+
+			int lastRowNum = sheet.getLastRowNum();
+			int lastCellNum = sheet.getRow(0).getLastCellNum();
+			Object[][] obj = new Object[lastRowNum][1];
+
+			for (int i = 0; i < lastRowNum; i++) {
+				try {
+					Map<Object, Object> datamap = new HashMap<>();
+					for (int j = 0; j < lastCellNum; j++) {
+
+						try {
+
+							datamap.put(sheet.getRow(0).getCell(j).toString(),
+									sheet.getRow(i + 1).getCell(j).toString());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					}
+
+					obj[i][0] = datamap;
+					return obj;
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+			}
+			if (workbook != null) {
+				try {
+					workbook.close();
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+			}
+
+		}
+		return data;
+
+	}
+}
+
 	
 	@Test(dataProvider = "data")
 	  public void integrationTest(Map<Object, Object> map) {

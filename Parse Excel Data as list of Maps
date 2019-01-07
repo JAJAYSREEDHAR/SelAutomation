@@ -1,0 +1,41 @@
+Program to Parse Excel Data as list of Maps -> how to use Map to with TestNG Dataprovider in Data Driven Testing
+
+@DataProvider(name = "data")
+	public  Object[][] dataSupplier() throws IOException {
+
+	    File file = new File("C:\\Users\\janapalaA\\Desktop\\Test.xlsx");
+	    FileInputStream fis = new FileInputStream(file);
+
+	    XSSFWorkbook wb = new XSSFWorkbook(fis);
+	    
+	    XSSFSheet sheet = wb.getSheet("Sheet1");
+	    //XSSFSheet sheet = wb.getSheetAt(0);
+	    wb.close();
+	    int lastRowNum = sheet.getLastRowNum() ;
+	    int lastCellNum = sheet.getRow(0).getLastCellNum();
+	    Object[][] obj = new Object[lastRowNum][1];
+
+	    for (int i = 0; i < lastRowNum; i++) {
+	      Map<Object, Object> datamap = new HashMap<>();
+	      for (int j = 0; j < lastCellNum; j++) {
+	        datamap.put(sheet.getRow(0).getCell(j).toString(), sheet.getRow(i+1).getCell(j).toString());
+	      }
+	      obj[i][0] = datamap;
+
+	    }
+	    return  obj;
+	  }
+	
+	
+	@Test(dataProvider = "data")
+	  public void integrationTest(Map<Object, Object> map) {
+	    System.out.println("-------------Test case started ----------------");
+	    System.out.println(map.get("Uname"));
+	    System.out.println(map.get("Password"));
+	    System.out.println(map.get("DOB"));
+
+	    System.out.println("-------------Test case Ended ----------------");
+
+	  }
+	
+

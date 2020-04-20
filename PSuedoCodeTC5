@@ -1,0 +1,5 @@
+Open Postman desktop application using Selenium
+Create New Collection as RestLearning
+Check whether the collection already exist
+If exist, delete the existing Collection
+Create new Collection

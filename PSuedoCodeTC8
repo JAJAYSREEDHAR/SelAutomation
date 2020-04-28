@@ -1,0 +1,12 @@
+https://www.justdial.com/
+Set the Location as Chennai
+Click Auto Care in the left menu
+Click Car Repair
+Click Car Brand as Hyundai
+Click Make as Hyundai Xcent
+Click on Location and Enter Porur
+Select Porur from the dropdown list
+Select Distance starting from 1 km
+Identify all the Service Center having Ratings >=4.5 and Votes >=50
+Save all the Service Center name and Phone number matching the above condition in excel 
+Close the browser
